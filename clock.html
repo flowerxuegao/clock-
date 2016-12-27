@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .clock{
+            width:200px;
+            height:200px;
+            border:5px solid #ccc;
+            border-radius:50%;
+            margin:0 auto;
+            position:relative;
+        }
+        .clockcenter{
+            width:10px;
+            height:10px;
+            background:#000;
+            position:absolute;
+            left:0;right:0;top:0;bottom:0;
+            margin:auto;
+            border-radius:50%;
+            z-index:1;
+        }
+    </style>
+    <script>
+        window.onload = function(){
+            var clock = document.getElementsByClassName("clock")[0];
+            var data = new Date();
+            createMark();//创建时间刻度
+            var hpointer=createPointer(5,30,"black",data.getHours()*30+(data.getMinutes()*6)/12);
+            var mpointer=createPointer(2,50,"black",data.getMinutes()*6);
+            var spointer=createPointer(2,80,"red",data.getSeconds()*6);
+            setInterval(function(){
+                var time = new Date();
+                hpointer.style.transform = "translate("+(200-hpointer.w)/2+"px,"+(100-hpointer.h)+"px) rotate("+(time.getHours()*30+(time.getMinutes()*6)/12)+"deg)";
+                mpointer.style.transform = "translate("+(200-mpointer.w)/2+"px,"+(100-mpointer.h)+"px) rotate("+time.getMinutes()*6+"deg)";
+                spointer.style.transform = "translate("+(200-spointer.w)/2+"px,"+(100-spointer.h)+"px) rotate("+time.getSeconds()*6+"deg)";
+
+            },1000)
+            function createPointer(w,h,c,a){//宽，高，颜色，度数
+
+                var div = document.createElement("div");
+                div.style.cssText = "width:"+w+"px;height:"+h+"px;background:"+c+";position:absolute;left:0;top:0";
+
+                div.style.transformOrigin="bottom";
+                div.style.transform = "translate("+(200-w)/2+"px,"+(100-h)+"px) rotate("+a+"deg)";
+                clock.appendChild(div);
+                div.w=w;
+                div.h=h;
+                return div;
+            }
+            function createMark(){
+                for(var i=0;i<60;i++)
+                {
+                    var w,h;
+                    //定义宽度和高度
+                    if(i%5==0)
+                    {
+                        w=4;
+                        h=8;
+                    }else{
+                        w=2;
+                        h=6;
+                    }
+                    var div = document.createElement("div");
+                    div.style.cssText = "width:"+w+"px;height:"+h+"px;background:#000;position:absolute;left:0;top:0";
+                    div.style.transform="translate("+(200-w)/2+"px,0px) rotate("+i*6+"deg)" ;
+                    div.style.transformOrigin="center 100px";
+                    clock.appendChild(div);
+                }
+            }
+
+
+        }
+
+    </script>
+</head>
+<body>
+<div class = "clock">
+    <!--表芯-->
+    <div class = "clockcenter"></div>
+</div>
+
+</body>
+</html>
